@@ -26,13 +26,13 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             this.unitOfWork = unitOfWork;
             this.sistemaFinanceirosRepositorio = sistemaFinanceirosRepositorio;
         }
-        public SistemaFinanceiroResponse Editar(int id, SistemaFinanceiroEditarRequest request)
+        public async Task<SistemaFinanceiroResponse> EditarAsync(int id, SistemaFinanceiroEditarRequest request)
         {
            SistemaFinanceiroComando comando = mapper.Map<SistemaFinanceiroComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Editar(id, comando);
+                SistemaFinanceiro sistemaFinanceiro = await sistemaFinanceirosServico.EditarAsync(id, comando);
                 unitOfWork.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);;
             }
@@ -43,13 +43,13 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             }
         }
 
-        public void Excluir(int id)
+        public async Task ExcluirAsync(int id)
         {
             try
             {
                 unitOfWork.BeginTransaction();
-                SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(id);
-                sistemaFinanceirosRepositorio.Excluir(sistemaFinanceiro);
+                SistemaFinanceiro sistemaFinanceiro = await sistemaFinanceirosServico.ValidarAsync(id);
+                await sistemaFinanceirosRepositorio.ExcluirAsync(sistemaFinanceiro);
                 unitOfWork.Commit();
             }
             catch
@@ -59,13 +59,13 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             }
         }
 
-        public SistemaFinanceiroResponse Inserir(SistemaFinanceiroInserirRequest request)
+        public async Task<SistemaFinanceiroResponse> InserirAsync(SistemaFinanceiroInserirRequest request)
         {
             SistemaFinanceiroComando comando = mapper.Map<SistemaFinanceiroComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Inserir(comando);
+                SistemaFinanceiro sistemaFinanceiro = await sistemaFinanceirosServico.InserirAsync(comando);
                 unitOfWork.Commit();
                 return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);
             }
@@ -76,21 +76,18 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
             }
         }
 
-        public PaginacaoConsulta<SistemaFinanceiroResponse> Listar(SistemaFinanceiroListarRequest request)
+        public async Task<PaginacaoConsulta<SistemaFinanceiroResponse>> ListarAsync(SistemaFinanceiroListarRequest request)
         {
            SistemaFinanceiroListarFiltro filtro = mapper.Map<SistemaFinanceiroListarFiltro>(request);
-            IQueryable<SistemaFinanceiro> query = sistemaFinanceirosRepositorio.Filtrar(filtro);
-            PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = sistemaFinanceirosRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
-            PaginacaoConsulta<SistemaFinanceiroResponse> response;
-            response = mapper.Map<PaginacaoConsulta<SistemaFinanceiroResponse>>(sistemaFinanceiros);
-            return response;
+            IQueryable<SistemaFinanceiro> query = await sistemaFinanceirosRepositorio.FiltrarAsync(filtro);
+            PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = await sistemaFinanceirosRepositorio.ListarAsync(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
+            return mapper.Map<PaginacaoConsulta<SistemaFinanceiroResponse>>(sistemaFinanceiros);
         }
 
-        public SistemaFinanceiroResponse Recuperar(int id)
+        public async Task<SistemaFinanceiroResponse> RecuperarAsync(int id)
         {
-            SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(id);
-            var response = mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);
-            return response;
+            SistemaFinanceiro sistemaFinanceiro = await sistemaFinanceirosServico.ValidarAsync(id);
+            return mapper.Map<SistemaFinanceiroResponse>(sistemaFinanceiro);
         }
     }
 }

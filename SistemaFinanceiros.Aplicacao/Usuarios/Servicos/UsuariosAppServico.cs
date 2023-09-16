@@ -35,13 +35,13 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
             this.mapper = mapper;
            this.unitOfWork = unitOfWork;
         }
-        public UsuarioResponse Editar(int id, UsuarioEditarRequest request)
+        public async Task<UsuarioResponse> EditarAsync(int id, UsuarioEditarRequest request)
         {
             UsuarioEditarComando comando = mapper.Map<UsuarioEditarComando>(request);
             try
             {
                 unitOfWork.BeginTransaction();
-                Usuario usuario = usuariosServico.Editar(id, comando);
+                Usuario usuario = await usuariosServico.EditarAsync(id, comando);
                 unitOfWork.Commit();
                 return mapper.Map<UsuarioResponse>(usuario);;
             }
@@ -52,13 +52,13 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
             }
         }
 
-        public void Excluir(int id)
+        public async Task ExcluirAsync(int id)
         {
             try
             {
                 unitOfWork.BeginTransaction();
-                Usuario usuario = usuariosServico.Validar(id);
-                usuariosRepositorio.Excluir(usuario);
+                Usuario usuario = await usuariosServico.ValidarAsync(id);
+                await usuariosRepositorio.ExcluirAsync(usuario);
                 unitOfWork.Commit();
             }
             catch
@@ -68,25 +68,18 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
             }
         }
 
-        public PaginacaoConsulta<UsuarioResponse> Listar(UsuarioListarRequest request)
+        public async Task<PaginacaoConsulta<UsuarioResponse>> ListarAsync(UsuarioListarRequest request)
         {
-          
-
             UsuarioListarFiltro filtro = mapper.Map<UsuarioListarFiltro>(request);
-            IQueryable<Usuario> query = usuariosRepositorio.Filtrar(filtro);
-
-
-            PaginacaoConsulta<Usuario> usuarios = usuariosRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
-            PaginacaoConsulta<UsuarioResponse> response;
-            response = mapper.Map<PaginacaoConsulta<UsuarioResponse>>(usuarios);
-            return response;
+            IQueryable<Usuario> query = await usuariosRepositorio.FiltrarAsync(filtro);
+            PaginacaoConsulta<Usuario> usuarios = await usuariosRepositorio.ListarAsync(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
+            return mapper.Map<PaginacaoConsulta<UsuarioResponse>>(usuarios);
         }
 
-        public UsuarioResponse Recuperar(int id)
+        public async Task<UsuarioResponse> RecuperarAsync(int id)
         {
-           Usuario usuario = usuariosServico.Validar(id);
-            var response = mapper.Map<UsuarioResponse>(usuario);
-            return response;
+           Usuario usuario = await usuariosServico.ValidarAsync(id);
+           return mapper.Map<UsuarioResponse>(usuario);
         }
     }
 }

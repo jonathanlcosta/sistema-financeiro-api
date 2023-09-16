@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaFinanceiros.Aplicacao.Categorias.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Categorias.Request;
@@ -38,7 +39,7 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
     /// </summary>  
     /// <param name="request"></param>
     /// <returns></returns>
-       [HttpGet("listar-sincrono")]
+       [HttpGet]
         public async Task<ActionResult<PaginacaoConsulta<CategoriaResponse>>> ListarAsync([FromQuery] CategoriaListarRequest request)
         {    
             var response = await categoriasAppServico.ListarAsync(request);

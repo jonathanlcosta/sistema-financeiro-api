@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NSubstitute;
@@ -88,12 +84,12 @@ namespace SistemaFinanceiros.Dominio.Testes.Categorias.Servicos
          public class InstanciarMetodo : CategoriasServicoTestes
         {
             [Fact]
-            public void Quando_DadosCategoriaForemValidos_Espero_ObjetoInstanciado()
+            public async void Quando_DadosCategoriaForemValidos_Espero_ObjetoInstanciado()
             {
                 CategoriaComando comando = Builder<CategoriaComando>.CreateNew()
                     .Build();
 
-                Categoria resultado = sut.Instanciar(comando);
+                Categoria resultado = await sut.InstanciarAsync(comando);
 
                 resultado.Nome.Should().Be(comando.Nome);
             }

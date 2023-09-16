@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NSubstitute;
@@ -38,37 +34,37 @@ namespace SistemaFinanceiros.Dominio.Testes.Usuarios.Servicos
             {
                 usuariosRepositorio.Recuperar(2).Returns(x => null);
 
-
-                sut.Invoking(x => x.Validar(2)).Should().Throw<RegraDeNegocioExcecao>();
+                sut.Invoking(x => x.ValidarAsync(2)).Should().ThrowAsync<RegraDeNegocioExcecao>();
             }
 
             [Fact]
-            public void Dado_UsuarioForEncontrado_Espero_UsuarioValido()
+            public async void Dado_UsuarioForEncontrado_Espero_UsuarioValido()
             {
-                usuariosRepositorio.Recuperar(1).Returns(usuarioValido);
-                sut.Validar(1).Should().BeSameAs(usuarioValido);
+                usuariosRepositorio.RecuperarAsync(1).Returns(usuarioValido);
+                var resultado = await sut.ValidarAsync(1);
+                resultado.Should().BeSameAs(usuarioValido);
             }
         }
 
         public class EditarDespesa : UsuariosServicoTestes
         {
             [Fact]
-            public void Quando_DadosUsuarioForemValidos_Espero_ObjetoEditado()
+            public async void Quando_DadosUsuarioForemValidos_Espero_ObjetoEditado()
             {
                 UsuarioEditarComando comando = Builder<UsuarioEditarComando>.CreateNew().With(x => x.CPF, "09876543212").
                 With(x => x.Email, "leonardo@gmail.com").
                 Build();
-                usuariosRepositorio.Recuperar(1).Returns(usuarioValido);
-                SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.idSistemaFinanceiro);
+                usuariosRepositorio.RecuperarAsync(1).Returns(usuarioValido);
+                SistemaFinanceiro sistemaFinanceiro = await sistemaFinanceirosServico.ValidarAsync(comando.idSistemaFinanceiro);
 
-                Usuario resultado = sut.Editar(1, comando);
+                Usuario resultado = await sut.EditarAsync(1, comando);
                 resultado.Nome.Should().Be(comando.Nome);
                 resultado.Email.Should().Be(comando.Email);
                 resultado.CPF.Should().Be(comando.CPF);
                 resultado.Administrador.Should().Be(comando.Administrador);
                 resultado.SistemaFinanceiro.Should().BeSameAs(sistemaFinanceiro);
                 resultado.SistemaAtual.Should().Be(comando.SistemaAtual);
-                usuariosRepositorio.Editar(resultado).Returns(usuarioValido);
+                usuariosRepositorio.EditarAsync(resultado).Returns(usuarioValido);
             }
 
         }

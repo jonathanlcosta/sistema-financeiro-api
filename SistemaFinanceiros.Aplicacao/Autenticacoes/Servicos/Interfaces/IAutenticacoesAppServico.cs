@@ -9,7 +9,7 @@ namespace SistemaFinanceiros.Aplicacao.Autenticacoes.Servicos.Interfaces
 {
     public interface IAutenticacoesAppServico
     {
-        LoginResponse Logar(LoginRequest loginRequest);
-        CadastroResponse Cadastrar(CadastroRequest cadastroRequest);
+        Task<LoginResponse> LogarAsync(LoginRequest loginRequest);
+        Task<CadastroResponse> CadastrarAsync(CadastroRequest cadastroRequest);
     }
 }

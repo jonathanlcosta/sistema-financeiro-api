@@ -17,18 +17,18 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos
         {
             this.sistemaFinanceirosRepositorio = sistemaFinanceirosRepositorio;
         }
-        public SistemaFinanceiro Editar(int id, SistemaFinanceiroComando comando)
+        public async Task<SistemaFinanceiro> EditarAsync(int id, SistemaFinanceiroComando comando)
         {
-            SistemaFinanceiro sistemaFinanceiro = Validar(id);
+            SistemaFinanceiro sistemaFinanceiro = await ValidarAsync(id);
             sistemaFinanceiro.SetNome(comando.Nome);
-            sistemaFinanceirosRepositorio.Editar(sistemaFinanceiro);
+            await sistemaFinanceirosRepositorio.EditarAsync(sistemaFinanceiro);
             return sistemaFinanceiro;
         }
 
-        public SistemaFinanceiro Inserir(SistemaFinanceiroComando comando)
+        public async Task<SistemaFinanceiro> InserirAsync(SistemaFinanceiroComando comando)
         {
         SistemaFinanceiro sistemaFinanceiro = Instanciar(comando);
-        sistemaFinanceirosRepositorio.Inserir(sistemaFinanceiro);
+        await sistemaFinanceirosRepositorio.InserirAsync(sistemaFinanceiro);
         return sistemaFinanceiro;
         }
 
@@ -38,14 +38,13 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Servicos
              return sistemaFinanceiro;
         }
 
-        public SistemaFinanceiro Validar(int id)
+        public async Task<SistemaFinanceiro> ValidarAsync(int id)
         {
-            var sistemaFinanceiroResponse = this.sistemaFinanceirosRepositorio.Recuperar(id);
-            if(sistemaFinanceiroResponse is null)
-            {
-                 throw new RegraDeNegocioExcecao("Sistema Financeiro não encontrado");
-            }
-            return sistemaFinanceiroResponse;
+            var sistemaFinanceiro = await this.sistemaFinanceirosRepositorio.RecuperarAsync(id);
+            if(sistemaFinanceiro is null)
+            throw new RegraDeNegocioExcecao("Sistema Financeiro não encontrado");
+
+            return sistemaFinanceiro;
         }
     }
 }

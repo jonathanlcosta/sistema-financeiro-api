@@ -59,7 +59,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
         public async Task<Despesa> EditarAsync(int id, DespesaComando comando)
         {
             Categoria categoria = await categoriasServico.ValidarAsync(comando.IdCategoria);
-            Usuario usuario = usuariosServico.Validar(comando.IdUsuario);
+            Usuario usuario = await usuariosServico.ValidarAsync(comando.IdUsuario);
             Despesa despesa = await ValidarAsync(id);
             despesa.SetNome(comando.Nome);
             despesa.SetValor(comando.Valor);
@@ -84,7 +84,7 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
         public async Task<Despesa> InstanciarAsync(DespesaComando comando)
         {
             Categoria categoria =  await categoriasServico.ValidarAsync(comando.IdCategoria);
-            Usuario usuario = usuariosServico.Validar(comando.IdUsuario);
+            Usuario usuario = await usuariosServico.ValidarAsync(comando.IdUsuario);
             Despesa despesa = new(comando.Nome, comando.Valor, comando.TipoDespesa, comando.DataVencimento, comando.Pago, comando.DespesaAtrasada,
             categoria, usuario);
 

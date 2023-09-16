@@ -22,9 +22,9 @@ namespace SistemaFinanceiros.API.Controllers.Usuarios
        }
 
         [HttpGet("{id}")]
-        public ActionResult<UsuarioResponse> Recuperar(int id)
+        public async Task<ActionResult<UsuarioResponse>> RecuperarAsync(int id)
         {
-            var response = usuariosAppServico.Recuperar(id);
+            var response = await usuariosAppServico.RecuperarAsync(id);
 
             if (response == null)
                 return NotFound();
@@ -33,25 +33,24 @@ namespace SistemaFinanceiros.API.Controllers.Usuarios
         }
 
        [HttpGet]
-        public ActionResult<PaginacaoConsulta<UsuarioResponse>> Listar([FromQuery] UsuarioListarRequest usuarioListarRequest)
-        {    var response = usuariosAppServico.Listar(usuarioListarRequest);
+        public async Task<ActionResult<PaginacaoConsulta<UsuarioResponse>>> ListarAsync([FromQuery] UsuarioListarRequest request)
+        {    var response = await usuariosAppServico.ListarAsync(request);
             return Ok(response);
         }
 
 
         [HttpPut("{id}")]
-        public ActionResult Editar(int id, [FromBody] UsuarioEditarRequest usuarioEditarRequest)
+        public async Task<ActionResult> EditarAsync(int id, [FromBody] UsuarioEditarRequest request)
         {
-
-            usuariosAppServico.Editar(id,  usuarioEditarRequest);
+            await usuariosAppServico.EditarAsync(id,  request);
             return Ok();
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult Excluir(int id)
+        public async Task<ActionResult> ExcluirAsync(int id)
         {
-            usuariosAppServico.Excluir(id);
+            await usuariosAppServico.ExcluirAsync(id);
             return Ok();
         }
     }

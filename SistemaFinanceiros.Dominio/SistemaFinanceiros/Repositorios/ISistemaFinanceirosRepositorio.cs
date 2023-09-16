@@ -10,6 +10,6 @@ namespace SistemaFinanceiros.Dominio.SistemaFinanceiros.Repositorios
 {
     public interface ISistemaFinanceirosRepositorio : IGenericoRepositorio<SistemaFinanceiro>
     {
-        IQueryable<SistemaFinanceiro> Filtrar(SistemaFinanceiroListarFiltro filtro);
+        Task<IQueryable<SistemaFinanceiro>> FiltrarAsync(SistemaFinanceiroListarFiltro filtro);
     }
 }

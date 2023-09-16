@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SistemaFinanceiros.Aplicacao.Autenticacoes.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Autenticacoes.Request;
@@ -21,18 +17,18 @@ namespace SistemaFinanceiros.API.Controllers.Autenticacoes
         }
 
         [HttpPost("logar")]
-        public ActionResult<LoginResponse> Logar([FromBody]LoginRequest loginRequest)
+        public async Task<ActionResult<LoginResponse>> Logar([FromBody]LoginRequest loginRequest)
         {
             
-            var response = autenticacoesAppServico.Logar(loginRequest);
+            var response = await autenticacoesAppServico.LogarAsync(loginRequest);
 
             return Ok(response);
         }
 
          [HttpPost("cadastro")]
-         public ActionResult<CadastroResponse> Cadastrar([FromBody]CadastroRequest cadastroRequest)
+         public async Task<ActionResult<CadastroResponse>> CadastrarAsync([FromBody]CadastroRequest cadastroRequest)
          {
-             var response = autenticacoesAppServico.Cadastrar(cadastroRequest);
+             var response = await autenticacoesAppServico.CadastrarAsync(cadastroRequest);
 
              return Ok(response);
          }

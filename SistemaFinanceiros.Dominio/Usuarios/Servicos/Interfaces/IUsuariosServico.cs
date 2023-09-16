@@ -10,7 +10,7 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces
 {
     public interface IUsuariosServico
     {
-        Usuario Validar(int id);
-        Usuario Editar(int id, UsuarioEditarComando comando);
+        Task<Usuario> ValidarAsync(int id);
+        Task<Usuario> EditarAsync(int id, UsuarioEditarComando comando);
     }
 }

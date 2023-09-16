@@ -22,9 +22,9 @@ namespace SistemaFinanceiros.API.Controllers.SistemaFinanceiros
        }
 
         [HttpGet("{id}")]
-        public ActionResult<SistemaFinanceiroResponse> Recuperar(int id)
+        public async Task<ActionResult<SistemaFinanceiroResponse>> RecuperarAsync(int id)
         {
-            var response = sistemaFinanceirosAppServico.Recuperar(id);
+            var response = await sistemaFinanceirosAppServico.RecuperarAsync(id);
 
             if (response == null)
                 return NotFound();
@@ -33,31 +33,30 @@ namespace SistemaFinanceiros.API.Controllers.SistemaFinanceiros
         }
 
        [HttpGet]
-        public ActionResult<PaginacaoConsulta<SistemaFinanceiroResponse>> Listar([FromQuery] SistemaFinanceiroListarRequest sistemaFinanceiroListarRequest)
-        {    var response = sistemaFinanceirosAppServico.Listar(sistemaFinanceiroListarRequest);
+        public async Task<ActionResult<PaginacaoConsulta<SistemaFinanceiroResponse>>> ListarAsync([FromQuery] SistemaFinanceiroListarRequest request)
+        {    var response = await sistemaFinanceirosAppServico.ListarAsync(request);
             return Ok(response);
         }
 
         [HttpPost]
-        public ActionResult<SistemaFinanceiroResponse> Inserir([FromBody] SistemaFinanceiroInserirRequest request)
+        public async Task<ActionResult<SistemaFinanceiroResponse>> InserirAsync([FromBody] SistemaFinanceiroInserirRequest request)
         {
-            var retorno = sistemaFinanceirosAppServico.Inserir(request);
+            var retorno = await sistemaFinanceirosAppServico.InserirAsync(request);
             return Ok(retorno);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Editar(int id, [FromBody] SistemaFinanceiroEditarRequest sistemaFinanceiroEditarRequest)
+        public async Task<ActionResult> EditarAsync(int id, [FromBody] SistemaFinanceiroEditarRequest request)
         {
-
-            sistemaFinanceirosAppServico.Editar(id,  sistemaFinanceiroEditarRequest);
+            await sistemaFinanceirosAppServico.EditarAsync(id,  request);
             return Ok();
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult Excluir(int id)
+        public async Task<ActionResult> ExcluirAsync(int id)
         {
-            sistemaFinanceirosAppServico.Excluir(id);
+            await sistemaFinanceirosAppServico.ExcluirAsync(id);
             return Ok();
         }
     }

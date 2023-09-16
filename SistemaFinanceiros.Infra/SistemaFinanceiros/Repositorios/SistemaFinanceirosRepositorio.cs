@@ -17,9 +17,9 @@ namespace SistemaFinanceiros.Infra.SistemaFinanceiros
         
        }
 
-        public IQueryable<SistemaFinanceiro> Filtrar(SistemaFinanceiroListarFiltro filtro)
+        public async Task<IQueryable<SistemaFinanceiro>> FiltrarAsync(SistemaFinanceiroListarFiltro filtro)
         {
-            IQueryable<SistemaFinanceiro> query = Query();
+            IQueryable<SistemaFinanceiro> query = await QueryAsync();
 
             if (!string.IsNullOrWhiteSpace(filtro.Nome))
             {

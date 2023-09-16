@@ -10,9 +10,9 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos.Interfaces
 {
     public interface IUsuariosAppServico
     {
-        PaginacaoConsulta<UsuarioResponse> Listar(UsuarioListarRequest usuarioListarRequest);
-        UsuarioResponse Recuperar(int id);
-        UsuarioResponse Editar(int id, UsuarioEditarRequest usuarioEditarRequest);
-        void Excluir(int id); 
+        Task<PaginacaoConsulta<UsuarioResponse>> ListarAsync(UsuarioListarRequest usuarioListarRequest);
+        Task<UsuarioResponse> RecuperarAsync(int id);
+        Task<UsuarioResponse> EditarAsync(int id, UsuarioEditarRequest usuarioEditarRequest);
+        Task ExcluirAsync(int id); 
     }
 }

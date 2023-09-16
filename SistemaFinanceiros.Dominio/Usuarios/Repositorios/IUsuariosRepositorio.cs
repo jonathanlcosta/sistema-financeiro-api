@@ -10,8 +10,8 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Repositorios
 {
     public interface IUsuariosRepositorio : IGenericoRepositorio<Usuario>
     {
-        Usuario RecuperaUsuarioPorEmail(string email);
-        IQueryable<Usuario> Filtrar(UsuarioListarFiltro filtro);
+        Task<Usuario> RecuperaUsuarioPorEmailAsync(string email);
+        Task<IQueryable<Usuario>> FiltrarAsync(UsuarioListarFiltro filtro);
 
     }
 }

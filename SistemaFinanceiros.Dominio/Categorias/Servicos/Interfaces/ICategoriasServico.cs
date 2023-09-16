@@ -12,6 +12,6 @@ namespace SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces
         Task<Categoria> ValidarAsync(int id);
         Task<Categoria> InserirAsync(CategoriaComando comando);
         Task<Categoria> EditarAsync(int id, CategoriaComando comando);
-        Categoria Instanciar(CategoriaComando comando);
+        Task<Categoria> InstanciarAsync(CategoriaComando comando);
     }
 }

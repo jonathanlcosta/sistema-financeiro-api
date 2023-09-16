@@ -35,25 +35,26 @@ namespace SistemaFinanceiros.Dominio.Testes.SistemaFinanceiros.Servicos
                 sistemaFinanceirosRepositorio.Recuperar(2).Returns(x => null);
 
 
-                sut.Invoking(x => x.Validar(2)).Should().Throw<RegraDeNegocioExcecao>();
+                sut.Invoking(x => x.ValidarAsync(2)).Should().ThrowAsync<RegraDeNegocioExcecao>();
             }
 
             [Fact]
-            public void Dado_SistemaForEncontrado_Espero_SistemaValido()
+            public async void Dado_SistemaForEncontrado_Espero_SistemaValido()
             {
-                sistemaFinanceirosRepositorio.Recuperar(1).Returns(sistemaValido);
-                sut.Validar(1).Should().BeSameAs(sistemaValido);
+                sistemaFinanceirosRepositorio.RecuperarAsync(1).Returns(sistemaValido);
+                var resultado = await sut.ValidarAsync(1);
+                resultado.Should().BeSameAs(sistemaValido);
             }
         }
 
         public class InserirMetodo: SistemaFinanceirosServicoTestes
         {
             [Fact]
-            public void Quando_DadosSistemaForemValidos_Espero_ObjetoInserido()
+            public async void Quando_DadosSistemaForemValidos_Espero_ObjetoInserido()
             {
                 SistemaFinanceiroComando comando = Builder<SistemaFinanceiroComando>.CreateNew().
                 Build();
-                SistemaFinanceiro resultado = sut.Inserir(comando);
+                SistemaFinanceiro resultado = await sut.InserirAsync(comando);
                 resultado.Nome.Should().Be(comando.Nome);
                 sistemaFinanceirosRepositorio.Inserir(resultado).Returns(sistemaValido);
             }
@@ -75,14 +76,14 @@ namespace SistemaFinanceiros.Dominio.Testes.SistemaFinanceiros.Servicos
         public class EditarDespesa : SistemaFinanceirosServicoTestes
         {
             [Fact]
-            public void Quando_DadosSistemaFinanceiroForemValidos_Espero_ObjetoEditado()
+            public async void Quando_DadosSistemaFinanceiroForemValidos_Espero_ObjetoEditado()
             {
                 SistemaFinanceiroComando comando = Builder<SistemaFinanceiroComando>.CreateNew().
                 Build();
-                sistemaFinanceirosRepositorio.Recuperar(1).Returns(sistemaValido);
-                SistemaFinanceiro resultado = sut.Editar(1, comando);
+                sistemaFinanceirosRepositorio.RecuperarAsync(1).Returns(sistemaValido);
+                SistemaFinanceiro resultado = await sut.EditarAsync(1, comando);
                 resultado.Nome.Should().Be(comando.Nome);
-                sistemaFinanceirosRepositorio.Editar(resultado).Returns(sistemaValido);
+                sistemaFinanceirosRepositorio.EditarAsync(resultado).Returns(sistemaValido);
             }
 
         }

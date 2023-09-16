@@ -17,9 +17,9 @@ namespace SistemaFinanceiros.Infra.Usuarios
             
         }
 
-        public IQueryable<Usuario> Filtrar(UsuarioListarFiltro filtro)
+        public async Task<IQueryable<Usuario>> FiltrarAsync(UsuarioListarFiltro filtro)
         {
-             IQueryable<Usuario> query = Query();
+             IQueryable<Usuario> query = await QueryAsync();
 
             if (!string.IsNullOrEmpty(filtro.Nome))
             {
@@ -39,10 +39,14 @@ namespace SistemaFinanceiros.Infra.Usuarios
             return query;
         }
 
-        public Usuario RecuperaUsuarioPorEmail(string email)
+        public async Task<Usuario> RecuperaUsuarioPorEmailAsync(string email)
         {
-            Usuario usuario =  session.Query<Usuario>().Where(usuario => usuario.Email == email).FirstOrDefault();
+            Usuario usuario = await session.QueryOver<Usuario>()
+                                            .Where(u => u.Email == email)
+                                            .SingleOrDefaultAsync();
+
             return usuario;
         }
+
     }
 }

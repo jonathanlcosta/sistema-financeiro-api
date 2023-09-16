@@ -109,7 +109,7 @@ namespace SistemaFinanceiros.Dominio.Testes.Despesas.Servicos
                 DespesaComando comando = Builder<DespesaComando>.CreateNew().
                 Build();
 
-                usuariosServico.Validar(comando.IdUsuario).Returns(usuarioValido);
+                usuariosServico.ValidarAsync(comando.IdUsuario).Returns(usuarioValido);
                 categoriasServico.ValidarAsync(comando.IdCategoria).Returns(categoriaValido);
 
                 Despesa resultado = await sut.InserirAsync(comando);

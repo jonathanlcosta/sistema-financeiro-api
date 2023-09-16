@@ -10,10 +10,10 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos.Interfaces
 {
     public interface ISistemaFinanceirosAppServico
     {
-        PaginacaoConsulta<SistemaFinanceiroResponse> Listar(SistemaFinanceiroListarRequest request);
-        SistemaFinanceiroResponse Recuperar(int id);
-        SistemaFinanceiroResponse Inserir(SistemaFinanceiroInserirRequest sistemaFinanceiroInserirRequest);
-        SistemaFinanceiroResponse Editar(int id, SistemaFinanceiroEditarRequest sistemaFinanceiroEditarRequest);
-        void Excluir(int id);
+        Task<PaginacaoConsulta<SistemaFinanceiroResponse>> ListarAsync(SistemaFinanceiroListarRequest request);
+        Task<SistemaFinanceiroResponse> RecuperarAsync(int id);
+        Task<SistemaFinanceiroResponse> InserirAsync(SistemaFinanceiroInserirRequest sistemaFinanceiroInserirRequest);
+        Task<SistemaFinanceiroResponse> EditarAsync(int id, SistemaFinanceiroEditarRequest sistemaFinanceiroEditarRequest);
+        Task ExcluirAsync(int id);
     }
 }

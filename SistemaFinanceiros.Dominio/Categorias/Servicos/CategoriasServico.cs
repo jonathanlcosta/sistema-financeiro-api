@@ -23,7 +23,7 @@ namespace SistemaFinanceiros.Dominio.Categorias.Servicos
         }
         public async Task<Categoria> EditarAsync(int id, CategoriaComando comando)
         {
-            SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.IdSistemaFinanceiro);
+            SistemaFinanceiro sistemaFinanceiro = await sistemaFinanceirosServico.ValidarAsync(comando.IdSistemaFinanceiro);
             Categoria categoria = await ValidarAsync(id);
             categoria.SetNome(comando.Nome);
             categoria.SetSistema(sistemaFinanceiro);
@@ -33,14 +33,14 @@ namespace SistemaFinanceiros.Dominio.Categorias.Servicos
 
         public async Task<Categoria> InserirAsync(CategoriaComando comando)
         {
-            Categoria categoria = Instanciar(comando);
+            Categoria categoria = await InstanciarAsync(comando);
             await categoriasRepositorio.InserirAsync(categoria);
             return categoria;
         }
 
-         public Categoria Instanciar(CategoriaComando comando)
+         public async Task<Categoria> InstanciarAsync(CategoriaComando comando)
         {
-            SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.IdSistemaFinanceiro);
+            SistemaFinanceiro sistemaFinanceiro = await sistemaFinanceirosServico.ValidarAsync(comando.IdSistemaFinanceiro);
             Categoria categoria = new(comando.Nome, sistemaFinanceiro);
             return categoria;
         }

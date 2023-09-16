@@ -21,27 +21,26 @@ namespace SistemaFinanceiros.Dominio.Usuarios.Servicos
             this.usuariosRepositorio = usuariosRepositorio;
             this.sistemaFinanceirosServico = sistemaFinanceirosServico;
         }
-        public Usuario Editar(int id, UsuarioEditarComando comando)
+        public async Task<Usuario> EditarAsync(int id, UsuarioEditarComando comando)
         {
-           SistemaFinanceiro sistemaFinanceiro = sistemaFinanceirosServico.Validar(comando.idSistemaFinanceiro);
-           Usuario usuario = Validar(id);
+           SistemaFinanceiro sistemaFinanceiro = await sistemaFinanceirosServico.ValidarAsync(comando.idSistemaFinanceiro);
+           Usuario usuario = await ValidarAsync(id);
            usuario.SetCpf(comando.CPF);
            usuario.SetEmail(comando.Email);
            usuario.SetAdministrador(comando.Administrador);
            usuario.SetSistemaAtual(comando.SistemaAtual);
            usuario.SetSistemaFinanceiro(sistemaFinanceiro);
            usuario.SetNome(comando.Nome);
-           usuariosRepositorio.Editar(usuario);
+           await usuariosRepositorio.EditarAsync(usuario);
            return usuario;
         }
 
-        public Usuario Validar(int id)
+        public async Task<Usuario> ValidarAsync(int id)
         {
-           var usuarioResponse = this.usuariosRepositorio.Recuperar(id);
+           var usuarioResponse = await usuariosRepositorio.RecuperarAsync(id);
             if(usuarioResponse is null)
-            {
-                 throw new RegraDeNegocioExcecao("Usuario não encontrado");
-            }
+            throw new RegraDeNegocioExcecao("Usuario não encontrado");
+
             return usuarioResponse;
         }
     }

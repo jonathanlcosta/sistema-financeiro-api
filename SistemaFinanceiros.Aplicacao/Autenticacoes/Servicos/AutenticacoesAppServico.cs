@@ -27,19 +27,17 @@ namespace SistemaFinanceiros.Aplicacao.Autenticacoes.Servicos
             this.mapper = mapper;
         }
 
-        public CadastroResponse Cadastrar(CadastroRequest cadastroRequest)
+        public async Task<CadastroResponse> CadastrarAsync(CadastroRequest cadastroRequest)
         {
-             var usuario =  autenticacoesServico.ValidarCadastro(cadastroRequest.Email, cadastroRequest.Senha);
+            var usuario =  autenticacoesServico.ValidarCadastro(cadastroRequest.Email, cadastroRequest.Senha);
             usuario.SetSenhaHash(BCrypt.Net.BCrypt.HashPassword(cadastroRequest.Senha));
-            usuario = usuariosRepositorio.Inserir(usuario);
-            var response = mapper.Map<CadastroResponse>(usuario);
-
-            return response;
+            usuario = await usuariosRepositorio.InserirAsync(usuario);
+            return mapper.Map<CadastroResponse>(usuario);
         }
 
-        public LoginResponse Logar(LoginRequest loginRequest)
+        public async Task<LoginResponse> LogarAsync(LoginRequest loginRequest)
         {
-           var usuario = usuariosRepositorio.RecuperaUsuarioPorEmail(loginRequest.Email);
+           var usuario = await usuariosRepositorio.RecuperaUsuarioPorEmailAsync(loginRequest.Email);
             usuario = autenticacoesServico.ValidarLogin(usuario, loginRequest.Senha);
 
             string token = autenticacoesServico.GerarToken(usuario);
