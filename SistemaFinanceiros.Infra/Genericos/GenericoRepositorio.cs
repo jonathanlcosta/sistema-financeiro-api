@@ -137,7 +137,8 @@ private static async Task<PaginacaoConsulta<T>> PaginarAsync(IQueryable<T> query
 
         public async Task<IQueryable<T>> QueryAsync()
         {
-            return await Task.Run(() => session.Query<T>());
+            List<T> resultado = await session.Query<T>().ToListAsync();
+            return resultado.AsQueryable();
         }
         
     }
