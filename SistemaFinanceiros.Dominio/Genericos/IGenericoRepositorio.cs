@@ -24,6 +24,7 @@ namespace SistemaFinanceiros.Dominio.Genericos
 
         IList<T> QueryList();
 
+        Task<IQueryable<T>> QueryAsync();
         Task<T> RecuperarAsync(int id);
 
         Task<T> InserirAsync(T entidade);

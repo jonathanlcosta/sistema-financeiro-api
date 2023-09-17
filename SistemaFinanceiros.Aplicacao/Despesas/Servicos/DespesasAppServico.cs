@@ -141,17 +141,17 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
             return mapper.Map<DespesaResponse>(despesa);
         }
 
-        public IList<DespesasResumo> Consulta()
+        public async Task<List<DespesasResumo>> ConsultaAsync()
         {
-            var query = despesasRepositorio.Query();
-            return query
-            .Select(x => new DespesasResumo
+            var query = await despesasRepositorio.QueryAsync();
+            var despesas = query.Select(x => new DespesasResumo
             {
                 NomeDespesa = x.Nome,
                 NomeSistema = x.Categoria.SistemaFinanceiro.Nome,
                 NomeCategoria = x.Categoria.Nome,
                 NomeUsuario = x.Usuario.Nome
             }).ToList();
+            return despesas;
         }
 
         public async Task<Stream> ExportarExcel(DespesaListarRequest request)

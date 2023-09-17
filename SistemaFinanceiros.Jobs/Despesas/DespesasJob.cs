@@ -32,7 +32,7 @@ namespace SistemaFinanceiros.Jobs.Despesas
                     // var quantidadeDespesasAtrasadas = despesasAppServico.ListarDespesas(new DespesaListarRequest()).Total;
 
                     // this.logger.LogInformation("Temos {quantidadeDespesasAtrasadas} Despesas atrasadas!", quantidadeDespesasAtrasadas);
-                    var despesa = despesasAppServico.Consulta().ToList();
+                    var despesa = await despesasAppServico.ConsultaAsync();
                     var despesaString = string.Join(", ", despesa.Select(d => d.ToString()));
                     this.logger.LogInformation("Temos {0} despesas: {1}", despesa.Count, despesaString);
 

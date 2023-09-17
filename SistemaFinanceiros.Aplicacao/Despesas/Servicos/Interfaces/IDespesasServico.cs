@@ -21,7 +21,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces
         Task<IList<DespesaResponse>> ListarDespesasUsuarioNaoPagasMesesAtras(string email);
         Task<PaginacaoConsulta<DespesaResponse>> ListarAsync(DespesaListarRequest request);
         Task<PaginacaoConsulta<DespesaResponse>> ListarDespesas(DespesaListarRequest request);
-        IList<DespesasResumo> Consulta();
+        Task<List<DespesasResumo>> ConsultaAsync();
         Task<Stream> ExportarExcel(DespesaListarRequest request);
 
     }

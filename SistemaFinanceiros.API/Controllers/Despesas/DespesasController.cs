@@ -76,9 +76,9 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
         }
 
         [HttpGet("Consulta")]
-        public ActionResult<IList<DespesasResumo>> Consulta()
+        public async Task<ActionResult<IList<DespesasResumo>>> ConsultaAsync()
         {
-            var response = despesasAppServico.Consulta();
+            var response = await despesasAppServico.ConsultaAsync();
             return Ok(response);
         }
 
