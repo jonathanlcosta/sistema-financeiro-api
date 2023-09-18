@@ -96,7 +96,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
         {
             DespesaListarFiltro filtro = mapper.Map<DespesaListarFiltro>(request);
             IQueryable<Despesa> query = await despesasRepositorio.Filtrar(filtro);
-            PaginacaoConsulta<Despesa> despesas = await despesasRepositorio.ListarAsync(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
+            PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
             PaginacaoConsulta<DespesaResponse> response;
             response = mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
             return response;
@@ -107,8 +107,7 @@ namespace SistemaFinanceiros.Aplicacao.Despesas.Servicos
 
             DespesaListarFiltro filtro = mapper.Map<DespesaListarFiltro>(request);
             IQueryable<Despesa> query = await despesasRepositorio.FiltrarDespesasAtrasadas(filtro);
-
-            PaginacaoConsulta<Despesa> despesas = await despesasRepositorio.ListarAsync(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
+            PaginacaoConsulta<Despesa> despesas = despesasRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
             return mapper.Map<PaginacaoConsulta<DespesaResponse>>(despesas);
         }
 

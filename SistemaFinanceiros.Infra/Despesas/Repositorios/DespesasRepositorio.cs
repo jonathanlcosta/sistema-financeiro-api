@@ -65,7 +65,7 @@ namespace SistemaFinanceiros.Infra.Despesas
 
         public async Task<IList<Despesa>> ListarDespesasUsuario(string email)
         {
-            IList<Despesa> despesas = await session.Query<Despesa>().Where(d => d.Usuario.Email == email).ToListAsync();
+            IList<Despesa> despesas = await Query().Where(d => d.Usuario.Email == email).ToListAsync();
             return despesas;
         }
 

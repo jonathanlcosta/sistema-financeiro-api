@@ -80,7 +80,7 @@ namespace SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos
         {
            SistemaFinanceiroListarFiltro filtro = mapper.Map<SistemaFinanceiroListarFiltro>(request);
             IQueryable<SistemaFinanceiro> query = await sistemaFinanceirosRepositorio.FiltrarAsync(filtro);
-            PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = await sistemaFinanceirosRepositorio.ListarAsync(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
+            PaginacaoConsulta<SistemaFinanceiro> sistemaFinanceiros = sistemaFinanceirosRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
             return mapper.Map<PaginacaoConsulta<SistemaFinanceiroResponse>>(sistemaFinanceiros);
         }
 

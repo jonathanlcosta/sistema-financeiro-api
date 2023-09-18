@@ -72,7 +72,7 @@ namespace SistemaFinanceiros.Aplicacao.Usuarios.Servicos
         {
             UsuarioListarFiltro filtro = mapper.Map<UsuarioListarFiltro>(request);
             IQueryable<Usuario> query = await usuariosRepositorio.FiltrarAsync(filtro);
-            PaginacaoConsulta<Usuario> usuarios = await usuariosRepositorio.ListarAsync(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
+            PaginacaoConsulta<Usuario> usuarios = usuariosRepositorio.Listar(query, request.Qt, request.Pg, request.CpOrd, request.TpOrd);
             return mapper.Map<PaginacaoConsulta<UsuarioResponse>>(usuarios);
         }
 
