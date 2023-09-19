@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaFinanceiros.Aplicacao.Usuarios.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Usuarios.Request;
@@ -12,6 +13,7 @@ namespace SistemaFinanceiros.API.Controllers.Usuarios
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsuariosController : ControllerBase
     {
         private readonly IUsuariosAppServico usuariosAppServico;

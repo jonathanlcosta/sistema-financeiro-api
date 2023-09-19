@@ -9,6 +9,7 @@ namespace SistemaFinanceiros.API.Controllers.Categorias
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CategoriasController : ControllerBase
     {
         private readonly ICategoriasAppServico categoriasAppServico;

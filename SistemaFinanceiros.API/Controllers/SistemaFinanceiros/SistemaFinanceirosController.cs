@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaFinanceiros.Aplicacao.SistemaFinanceiros.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.SistemaFinanceiros.Request;
@@ -12,6 +13,7 @@ namespace SistemaFinanceiros.API.Controllers.SistemaFinanceiros
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class SistemaFinanceirosController : ControllerBase
     {
         private readonly ISistemaFinanceirosAppServico sistemaFinanceirosAppServico;

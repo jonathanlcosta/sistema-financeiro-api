@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaFinanceiros.Aplicacao.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.DataTransfer.Despesas.Request;
@@ -9,6 +10,7 @@ namespace SistemaFinanceiros.API.Controllers.Despesas
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class DespesasController : ControllerBase
     {
         private readonly IDespesasAppServico despesasAppServico;
