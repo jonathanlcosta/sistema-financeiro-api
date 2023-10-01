@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using SistemaFinanceiros.Dominio.Categorias.Entidades;
 using SistemaFinanceiros.Dominio.Categorias.Servicos.Interfaces;
@@ -10,6 +12,7 @@ using SistemaFinanceiros.Dominio.Despesas.Repositorios;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Interfaces;
 using SistemaFinanceiros.Dominio.Execoes;
+using SistemaFinanceiros.Dominio.Mensageria.Interfaces;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces;
 
@@ -20,13 +23,16 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
         private readonly IDespesasRepositorio despesasRepositorio;
         private readonly ICategoriasServico categoriasServico;
         private readonly IUsuariosServico usuariosServico;
-        public DespesasServico(IDespesasRepositorio despesasRepositorio,ICategoriasServico categoriasServico,
-        IUsuariosServico usuariosServico )
+        private readonly IMensageriaServico mensageriaServico;
+        private const string QUEUE_NAME = "Despesas";
+
+        public DespesasServico(IDespesasRepositorio despesasRepositorio, ICategoriasServico categoriasServico,
+        IUsuariosServico usuariosServico, IMensageriaServico mensageriaServico)
         {
             this.despesasRepositorio = despesasRepositorio;
             this.categoriasServico = categoriasServico;
             this.usuariosServico = usuariosServico;
-
+            this.mensageriaServico = mensageriaServico;
         }
 
         public async Task<object> CarregaGraficos(string email)
@@ -56,6 +62,19 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
             };
         }
 
+        public void EnviarNotifificacaoDespesaAtrasada(Despesa despesa)
+        {
+            string despesaJson = JsonSerializer.Serialize(despesa);
+            byte[] despesaBytes = Encoding.UTF8.GetBytes(despesaJson);
+            mensageriaServico.Publish(QUEUE_NAME, despesaBytes);
+        }
+
+        public void VerificarDespesaAtrasada(Despesa despesa)
+        {
+            if(despesa.DespesaAtrasada is true)
+            EnviarNotifificacaoDespesaAtrasada(despesa);
+        }
+
         public async Task<Despesa> EditarAsync(int id, DespesaComando comando)
         {
             Categoria categoria = await categoriasServico.ValidarAsync(comando.IdCategoria);
@@ -77,7 +96,8 @@ namespace SistemaFinanceiros.Dominio.Despesas.Servicos
         public async Task<Despesa> InserirAsync(DespesaComando comando)
         {
             Despesa despesa = await InstanciarAsync(comando);
-           await despesasRepositorio.InserirAsync(despesa);
+            VerificarDespesaAtrasada(despesa);
+            await despesasRepositorio.InserirAsync(despesa);
             return despesa;
         }
 

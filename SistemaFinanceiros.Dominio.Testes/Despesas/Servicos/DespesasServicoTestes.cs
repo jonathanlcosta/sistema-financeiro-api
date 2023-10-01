@@ -13,6 +13,7 @@ using SistemaFinanceiros.Dominio.Despesas.Repositorios;
 using SistemaFinanceiros.Dominio.Despesas.Servicos;
 using SistemaFinanceiros.Dominio.Despesas.Servicos.Comandos;
 using SistemaFinanceiros.Dominio.Execoes;
+using SistemaFinanceiros.Dominio.Mensageria.Interfaces;
 using SistemaFinanceiros.Dominio.Usuarios.Entidades;
 using SistemaFinanceiros.Dominio.Usuarios.Servicos.Interfaces;
 using Xunit;
@@ -25,18 +26,20 @@ namespace SistemaFinanceiros.Dominio.Testes.Despesas.Servicos
         private readonly IDespesasRepositorio despesasRepositorio;
         private readonly IUsuariosServico usuariosServico;
         private readonly ICategoriasServico categoriasServico;
+        private readonly IMensageriaServico mensageriaServico;
         private readonly Despesa despesaValido;
         private readonly Usuario usuarioValido;
         private readonly Categoria categoriaValido;
         public DespesasServicoTestes()
         {
             despesasRepositorio = Substitute.For<IDespesasRepositorio>();
+            mensageriaServico = Substitute.For<IMensageriaServico>();
             usuarioValido = Builder<Usuario>.CreateNew().Build();
             categoriaValido = Builder<Categoria>.CreateNew().Build();
             usuariosServico = Substitute.For<IUsuariosServico>();
             categoriasServico = Substitute.For<ICategoriasServico>();
             despesaValido = Builder<Despesa>.CreateNew().Build();
-            sut = new(despesasRepositorio, categoriasServico, usuariosServico);
+            sut = new(despesasRepositorio, categoriasServico, usuariosServico, mensageriaServico);
         }
 
         public class EditarDespesa : DespesasServicoTestes
